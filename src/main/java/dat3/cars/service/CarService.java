@@ -22,20 +22,14 @@ public class CarService {
     }
 
     public List<CarResponse> getCars(boolean includeAll){
-        List<CarResponse> response = new ArrayList<>();
-
-        List<Car> cars =carRepository.findAll();
-        for (Car car : cars){
-            CarResponse cr = new CarResponse(car, includeAll);
-            response.add(cr);
-        }
-        return response;
+        List<Car> cars = carRepository.findAll();
+        return cars.stream().map((car) -> new CarResponse(car, includeAll)).toList();
     }
 
     public CarResponse addCar(CarRequest body){
-        if(carRepository.existsById(body.getId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car does not exist");
-        }
+        /*if(carRepository.existsById(body.getId())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car already exist");
+        }*/
         Car newCar = CarRequest.getCarEntity(body);
         newCar = carRepository.save(newCar);
 
@@ -43,7 +37,7 @@ public class CarService {
     }
 
     public ResponseEntity<Boolean> editCar(CarRequest body, int id){
-        Car car = carRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car with this id does not exist"));
+        Car car = getCarById(id);
         if(!(body.getId() == id)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot change id");
         }
@@ -51,11 +45,22 @@ public class CarService {
         car.setModel(body.getModel());
         car.setMaxDiscount(body.getMaxDiscount());
         car.setRentalPriceDay(body.getRentalPriceDay());
+        carRepository.save(car);
         return ResponseEntity.ok(true);
     }
 
     public CarResponse findById(int id){
-        Car car = carRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car with this id does not exist"));
+        Car car = getCarById(id);
         return new CarResponse(car, true);
+    }
+
+    public void deleteCarById(int id){
+        Car car = getCarById(id);
+        carRepository.delete(car);
+    }
+
+    private Car getCarById(int id){
+        return carRepository.findById(id).
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with this id does not exist"));
     }
 }

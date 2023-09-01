@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarResponse {
-    private int id;
+    private int id; //Remember this is the primary key
     private String brand;
     private String model;
     private double rentalPriceDay;
@@ -24,9 +24,8 @@ public class CarResponse {
     LocalDateTime created;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss",shape = JsonFormat.Shape.STRING)
     LocalDateTime edited;
-    Integer ranking;
-    Boolean approved;
 
+    //Convert Car Entity to Car DTO
     public CarResponse(Car c, boolean includeAll) {
         this.id = c.getId();
         this.brand = c.getBrand();

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car's 'R' Us</title>
+</head>
+<body class="container">
+  <h1>Cars 'R' Us Demo</h1>
+  <button id="btn-fetch-cars" class="btn">Fetch Cars</button>
+  <table class="table-cars">
+    <thead>
+    <tr><th>Brand</th><th>Model</th><th>Price Pr. Day</th></tr>
+    </thead>
+    <tbody id="table-car-body"></tbody>
+  </table>
+
+<script>
+  const fetchCars = document.getElementById('btn-fetch-cars');
+  const tableBody = document.querySelector('#table-rows');
+  const url = 'api/cars';
+
+  fetchCars.addEventListener('click', () => {
+    fetch(url)
+            .then(response => response.json())
+            .then(cars => {
+              const rowsAsStr = cars.map(car => {
+                return `<tr>
+                        <td>${car.brand}</td>
+                        <td>${car.model}</td>
+                        <td>${car.pricePrDay}</td>
+                    </tr>`
+              }).join('');
+              document.getElementById("table-car-body").innerHTML = rowsAsStr
+            });
+  })
+</script>
+</body>
+</html>

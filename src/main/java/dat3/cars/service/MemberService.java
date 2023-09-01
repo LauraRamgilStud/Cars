@@ -22,13 +22,6 @@ public class MemberService {
 
     public List<MemberResponse> getMembers(boolean includeAll) {
         List<Member> members = memberRepository.findAll();
-        /*List<MemberResponse> response = new ArrayList<>();
-        List<Member> members = memberRepository.findAll();
-        for(Member member: members){
-            MemberResponse mr = new MemberResponse(member, includeAll);
-            response.add(mr);
-        }*/
-
         return members.stream().map(((member) -> new MemberResponse(member, includeAll))).toList();
     }
 

@@ -18,27 +18,33 @@ public class CarController {
         this.carService = carService;
     }
 
-    //Security -- Admin
+    //Security --> Admin only/Anonymous
     @GetMapping
     List<CarResponse> getCars(){
         return carService.getCars(false);
     }
 
+    //Security --> Admin Only
     @GetMapping(path = "/{id}")
     CarResponse getCarById(@PathVariable int id) throws Exception {
         return carService.findById(id);
     }
 
+    //Security --> Admin Only
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     CarResponse addCar(@RequestBody CarRequest body){
         return carService.addCar(body);
     }
 
+    //Security --> Admin Only
     @PutMapping("/{id}")
     ResponseEntity<Boolean> editCar(@RequestBody CarRequest body, @PathVariable int id){
         return carService.editCar(body, id);
     }
 
+    //Security --> Admin Only
     @DeleteMapping("/{id}")
-    void deleteCarById(@PathVariable int id){}
+    void deleteCarById(@PathVariable int id){
+        carService.deleteCarById(id);
+    }
 }
