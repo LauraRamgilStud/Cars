@@ -24,6 +24,11 @@ public class CarController {
         return carService.getCars(false);
     }
 
+    @GetMapping("/available")
+    List<CarResponse> getCarsAvailable(){
+        return carService.getAvailableCars(false);
+    }
+
     //Security --> Admin Only
     @GetMapping(path = "/{id}")
     CarResponse getCarById(@PathVariable int id) throws Exception {

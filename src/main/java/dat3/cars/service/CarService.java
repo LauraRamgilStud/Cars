@@ -27,13 +27,15 @@ public class CarService {
     }
 
     public CarResponse addCar(CarRequest body){
-        /*if(carRepository.existsById(body.getId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car already exist");
-        }*/
         Car newCar = CarRequest.getCarEntity(body);
         newCar = carRepository.save(newCar);
 
         return new CarResponse(newCar, true);
+    }
+
+    public List<CarResponse> getAvailableCars(boolean includeAll){
+        List<Car> cars = carRepository.findAllByReservationsIsEmpty();
+        return cars.stream().map((car) -> new CarResponse(car, includeAll)).toList();
     }
 
     public ResponseEntity<Boolean> editCar(CarRequest body, int id){

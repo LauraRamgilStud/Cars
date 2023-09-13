@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -26,6 +28,17 @@ public class Car extends AdminDetails{
     private double rentalPriceDay;
     @Column(name = "max_discount")
     private int maxDiscount;
+
+    // Mapped by name of the attribute in the class at the other end -> in this case the Reservation class
+    @OneToMany(mappedBy = "car", fetch = FetchType.EAGER)
+    private List<Reservation> reservations;
+
+    public void addReservation(Reservation reservation){
+        if(reservations == null){
+            reservations = new ArrayList<>();
+        }
+        reservations.add(reservation);
+    }
 
     public Car(String brand, String model, double rentalPriceDay, int maxDiscount) {
         this.brand = brand;
