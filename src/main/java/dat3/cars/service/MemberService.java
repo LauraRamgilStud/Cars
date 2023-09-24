@@ -20,9 +20,24 @@ public class MemberService {
     }
 
 
+    public List<MemberResponse> getMembersV2(boolean includeAll, boolean includeReservations) {
+        List<Member> members = memberRepository.findAll();
+        List<MemberResponse> response = new ArrayList<>();
+        for(Member member: members){
+            MemberResponse mr = new MemberResponse(member,includeAll,includeReservations);
+            response.add(mr);
+        }
+        return response;
+    }
+
     public List<MemberResponse> getMembers(boolean includeAll) {
         List<Member> members = memberRepository.findAll();
-        return members.stream().map(((member) -> new MemberResponse(member, includeAll))).toList();
+        List<MemberResponse> response = new ArrayList<>();
+        for(Member member: members){
+            MemberResponse mr = new MemberResponse(member,includeAll);
+            response.add(mr);
+        }
+        return response;
     }
 
     public MemberResponse addMember(MemberRequest body) {

@@ -50,10 +50,13 @@ public class MemberResponse {
             this.approved = m.isApproved();
             this.ranking = m.getRanking();
         }
-        this.reservations = m.getReservations()
-                .stream()
-                .map((reservation -> new ReservationResponse(reservation)))
-                .toList();
+    }
+
+    public MemberResponse(Member m, boolean includeAll,boolean includeReservations) {
+        this(m,includeAll); //Call the two argument constructor
+        if(includeReservations){
+            this.reservations = m.getReservations().stream().map(ReservationResponse::new).toList();
+        }
     }
 }
 

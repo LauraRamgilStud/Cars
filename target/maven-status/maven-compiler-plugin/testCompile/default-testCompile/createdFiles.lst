@@ -1,0 +1,6 @@
+dat3\cars\service\CarServiceH2Test.class
+dat3\cars\repository\ReservationRepositoryTest.class
+dat3\cars\CarsApplicationTests.class
+dat3\cars\service\MemberServiceH2Test.class
+dat3\cars\repository\CarRepositoryTest.class
+dat3\cars\repository\MemberRepositoryTest.class

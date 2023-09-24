@@ -19,7 +19,83 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Configuration
+public class DeveloperData implements ApplicationRunner {
+
+    MemberRepository memberRepository;
+    CarRepository carRepository;
+    ReservationRepository reservationRepository;
+
+    public DeveloperData(MemberRepository memberRepository, CarRepository carRepository, ReservationRepository reservationRepository) {
+        this.memberRepository = memberRepository;
+        this.carRepository = carRepository;
+        this.reservationRepository = reservationRepository;
+    }
+
+    //Obviously this data setup must never be used in production
+    private final String passwordUsedByAll = "test12";
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        List<Member> members = MemberTestDataFactory.generateTestMembers("test12",2);
+        memberRepository.saveAll(members);
+        List<Car> cars = CarTestDataFactory.generateTestCars();
+        carRepository.saveAll(cars);
+
+        Car car1 = new Car("VW", "Golf", 760, 25);
+        Member m1 = new Member("Jan","test12","a@b.dk","Jan","Jensen","Lyngbyvej 1","Lyngby","2800");
+        carRepository.save(car1);
+        memberRepository.save(m1);
+
+        LocalDate date1 = LocalDate.now().plusDays(2);
+        LocalDate date2 = LocalDate.now().plusDays(3);
+        Reservation r1 = new Reservation(date1, car1, m1);
+        Reservation r2 = new Reservation(date2, car1, m1);
+        reservationRepository.save(r1);
+        reservationRepository.save(r2);
+
+        System.out.println("xxxx ------> "+car1.getReservations().size());
+        System.out.println("xxxx ------> "+m1.getReservations().size());
+
+        setupUserWithRoleUsers();
+    }
+
+    @Autowired
+    UserWithRolesRepository userWithRolesRepository;
+
+
+    /*****************************************************************************************
+     NEVER  COMMIT/PUSH CODE WITH DEFAULT CREDENTIALS FOR REAL
+     iT'S ONE OF THE TOP SECURITY FLAWS YOU CAN DO
+     *****************************************************************************************/
+    private void setupUserWithRoleUsers() {
+
+        System.out.println("******************************************************************************");
+        System.out.println("******* NEVER  COMMIT/PUSH CODE WITH DEFAULT CREDENTIALS FOR REAL ************");
+        System.out.println("******* REMOVE THIS BEFORE DEPLOYMENT, AND SETUP DEFAULT USERS DIRECTLY  *****");
+        System.out.println("**** ** ON YOUR REMOTE DATABASE                 ******************************");
+        System.out.println("******************************************************************************");
+        UserWithRoles user1 = new UserWithRoles("user1", passwordUsedByAll, "user1@a.dk");
+        UserWithRoles user2 = new UserWithRoles("user2", passwordUsedByAll, "user2@a.dk");
+        UserWithRoles user3 = new UserWithRoles("user3", passwordUsedByAll, "user3@a.dk");
+        UserWithRoles user4 = new UserWithRoles("user4", passwordUsedByAll, "user4@a.dk");
+        user1.addRole(Role.USER);
+        user1.addRole(Role.ADMIN);
+        user2.addRole(Role.USER);
+        user3.addRole(Role.ADMIN);
+        //No Role assigned to user4
+        userWithRolesRepository.save(user1);
+        userWithRolesRepository.save(user2);
+        userWithRolesRepository.save(user3);
+        userWithRolesRepository.save(user4);
+    }
+
+
+}
+
+
+/*@Configuration
 public class DeveloperData implements ApplicationRunner {
     CarRepository carRepository;
     MemberRepository memberRepository;
@@ -94,7 +170,7 @@ public class DeveloperData implements ApplicationRunner {
         members.add(new Member("user3", "password3", "user3@example.com", "Michael", "Johnson", "789 Oak St", "Villagetown", "13579"));
         members.add(new Member("user4", "password4", "user4@example.com", "Emily", "Williams", "567 Pine St", "Suburbia", "24680"));
         members.add(new Member("user5", "password5", "user5@example.com", "David", "Brown", "890 Maple St", "Hometown", "97531"));
-        /*members.add(new Member("user6", "password6", "user6@example.com", "Olivia", "Jones", "234 Cedar St", "Hamlet", "86420"));
+        *//*members.add(new Member("user6", "password6", "user6@example.com", "Olivia", "Jones", "234 Cedar St", "Hamlet", "86420"));
         members.add(new Member("user7", "password7", "user7@example.com", "William", "Garcia", "876 Birch St", "Meadowville", "25789"));
         members.add(new Member("user8", "password8", "user8@example.com", "Sophia", "Martinez", "543 Walnut St", "Countryside", "10475"));
         members.add(new Member("user9", "password9", "user9@example.com", "James", "Anderson", "678 Spruce St", "Ruraltown", "80246"));
@@ -103,10 +179,10 @@ public class DeveloperData implements ApplicationRunner {
         members.add(new Member("user12", "password12", "user12@example.com", "Ava", "Lopez", "456 Cedar St", "Urbanville", "29601"));
         members.add(new Member("user13", "password13", "user13@example.com", "Liam", "Hernandez", "789 Birch St", "Metropolis", "71385"));
         members.add(new Member("user14", "password14", "user14@example.com", "Mia", "Gonzalez", "567 Maple St", "Citytown", "96024"));
-        members.add(new Member("user15", "password15", "user15@example.com", "Benjamin", "Perez", "890 Elm St", "Suburbania", "54231"));*/
+        members.add(new Member("user15", "password15", "user15@example.com", "Benjamin", "Perez", "890 Elm St", "Suburbania", "54231"));*//*
         memberRepository.saveAll(members);
 
-        /*LocalDate dateTest = LocalDate.of(2023, 12, 12);
+        *//*LocalDate dateTest = LocalDate.of(2023, 12, 12);
         LocalDate date = dateTest.plusDays(1);
         LocalDate date1 = LocalDate.now().minusDays(3);
         Reservation r1 = new Reservation(date, carRepository.getReferenceById(1), memberRepository.getReferenceById("user1"));
@@ -117,16 +193,16 @@ public class DeveloperData implements ApplicationRunner {
 
         System.out.println("Found: " + reservationRepository.existsByCarIdAndRentalDate(carRepository.getReferenceById(1).getId(), date));
         System.out.println("Not Found: " + reservationRepository.existsByCarIdAndRentalDate(carRepository.getReferenceById(1).getId(), dateTest));
-*/
+*//*
         setupUserWithRoleUsers();
     }
 
     final String passwordUsedByAll = "test12";
 
-    /*****************************************************************************************
+    *//*****************************************************************************************
      NEVER  COMMIT/PUSH CODE WITH DEFAULT CREDENTIALS FOR REAL
      iT'S ONE OF THE TOP SECURITY FLAWS YOU CAN DO
-     *****************************************************************************************/
+     *****************************************************************************************//*
     private void setupUserWithRoleUsers() {
 
         System.out.println("******************************************************************************");
@@ -149,4 +225,4 @@ public class DeveloperData implements ApplicationRunner {
         userWithRolesRepository.save(user4);
     }
 
-}
+}*/

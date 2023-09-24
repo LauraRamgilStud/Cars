@@ -47,7 +47,7 @@ class CarRepositoryTest {
     void findAllCarsWithoutReservations(){
         List<Car> cars = carRepository.findAllByReservationsIsEmpty();
 
-        assertEquals(2, cars.size());
+        assertEquals(3, cars.size());
     }
 
     @Test
@@ -67,6 +67,6 @@ class CarRepositoryTest {
     @Test
     public void testAll(){
         Long count = carRepository.count();
-        assertEquals(2, count);
+        assertEquals(3, count);
     }
 }
