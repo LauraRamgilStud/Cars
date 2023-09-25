@@ -18,24 +18,9 @@ public class ReservationController {
         this.service = service;
     }
 
-    // Security --> Admin Only
-    @GetMapping
-    List<ReservationResponse> getReservations(){
-        return service.getReservations();
+    @PostMapping
+    ReservationResponse makeReservation(@RequestBody ReservationRequest res){
+        ReservationResponse r = service.reserveCar(res);
+        return r;
     }
-
-    //Security --> Admin Only
-    @GetMapping("/{username}")
-    List<ReservationResponse> getReservationsByUsername(@PathVariable String username) throws Exception{
-        return service.getReservationsByUsername(username);
-    }
-
-
-    //Security --> Anonymous
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ReservationResponse makeReservation(@RequestBody ReservationRequest res){
-        return service.reserveCar(res);
-    }
-
-
 }

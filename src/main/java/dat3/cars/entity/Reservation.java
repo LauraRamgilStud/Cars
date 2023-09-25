@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import dat3.cars.entity.Member;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
